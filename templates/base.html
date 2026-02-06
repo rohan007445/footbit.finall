@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Footbit - Soccer News & Shop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>⚽ FOOTBIT ⚽</h1>
+        <p>Your #1 Source for Soccer News!</p>
+    </div>
+    
+    <div class="nav">
+        <div class="nav-left">
+            <a href="/">Home</a> |
+            <a href="/shop">🛒 Shop</a> |
+            <a href="/cart">Cart ({{ cart_count }})</a>
+            {% if current_user.is_authenticated %}
+            | <a href="/orders">📦 Orders</a>
+            | <a href="/settings">⚙️ Settings</a>
+            | <a href="/export/articles/text">📄 Export Articles</a>
+            | <a href="/export/orders/text">📋 Export Orders</a>
+            {% if current_user.username == 'admin' %}
+            | <a href="/admin" style="color: #fffacd; font-weight: bold;">🔧 Admin</a>
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="nav-right">
+            {% if current_user.is_authenticated %}
+                <span class="user-profile">
+                    <span class="profile-pic">{{ current_user.profile_pic }}</span>
+                    <span class="username">{{ current_user.username }}</span>
+                </span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+                <a href="{{ url_for('register') }}" class="register-btn">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <div class="container">
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+        
+        <div class="sidebar">
+            <h3>🛒 Shop Corner</h3>
+            {% block sidebar %}
+            {% if products %}
+                {% for product in products %}
+                <div class="product-mini">
+                    <div class="product-icon">{{ product.image }}</div>
+                    <strong>{{ product.name }}</strong><br>
+                    <span class="price">${{ "%.2f"|format(product.price) }}</span><br>
+                    <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}" style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="small-btn">Add to Cart</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% endif %}
+            <a href="/shop" class="more-link">See All Products >></a>
+            {% endblock %}
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Footbit 2025 - Made with ❤️ for soccer fans</p>
+    </div>
+</body>
+</html>

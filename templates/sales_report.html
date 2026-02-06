@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>📊 Sales Report</h2>
+
+<div class="admin-stats">
+    <div class="stat-card">
+        <h3>Total Sales</h3>
+        <p class="stat-number">${{ "%.2f"|format(report.total_sales) }}</p>
+    </div>
+</div>
+
+<h3>Orders by Status </h3>
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Order Count</th>
+            <th>Total Revenue</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for status in report.orders_by_status %}
+        <tr>
+            <td>{{ status.status }}</td>
+            <td>{{ status.count }}</td>
+            <td>${{ "%.2f"|format(status.revenue or 0) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Top 5 Customers </h3>
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Total Orders</th>
+            <th>Total Spent</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in report.top_customers %}
+        <tr>
+            <td>{{ customer.username }}</td>
+            <td>{{ customer.order_count }}</td>
+            <td>${{ "%.2f"|format(customer.total_spent) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Monthly Sales </h3>
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Orders</th>
+            <th>Revenue</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for month in report.monthly_sales %}
+        <tr>
+            <td>{{ month.month }}</td>
+            <td>{{ month.orders }}</td>
+            <td>${{ "%.2f"|format(month.revenue) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+<a href="{{ url_for('admin_panel') }}" class="back-link">← Back to Admin</a>
+{% endblock %}

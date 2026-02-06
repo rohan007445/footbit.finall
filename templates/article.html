@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="article-full">
+    <h2>{{ article.title }}</h2>
+    <p class="meta">By {{ article.author }} | {{ article.date }}</p>
+    <div class="article-content">
+        {% for paragraph in article.content.split('\n\n') %}
+            {% if paragraph.strip() %}
+                <p>{{ paragraph }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <a href="/" class="back-link">← Back to News</a>
+</div>
+{% endblock %}

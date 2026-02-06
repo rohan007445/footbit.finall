@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<div class="checkout-container">
+    <div class="checkout-form-container">
+        <h3>Delivery Information</h3>
+        <form method="POST" action="{{ url_for('place_order') }}" class="checkout-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="form-group">
+                <label>📅 Delivery Date:</label>
+                <input type="date" name="delivery_date" class="form-control" min="{{ min_date }}" required>
+                <small>Earliest delivery: tomorrow</small>
+            </div>
+            
+            <div class="form-group">
+                <label>📍 Delivery Location:</label>
+                <input type="text" name="delivery_location" class="form-control" placeholder="Enter your full address" required>
+            </div>
+            
+            <div class="form-group">
+                <label>💳 Payment Method:</label>
+                <select name="payment_method" class="form-control" required>
+                    <option value="">Select payment method</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Debit Card">Debit Card</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="place-order-btn">Place Order</button>
+            
+            <div class="payment-info">
+                <p><strong>Payment Information:</strong></p>
+                <ul>
+                    <li>All transactions are secure and encrypted</li>
+                    <li>You will receive order confirmation via email</li>
+                    <li>Track your order anytime in Orders section</li>
+                </ul>
+            </div>
+        </form>
+    </div>
+    
+    <div class="checkout-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>${{ "%.2f"|format(subtotal) }}</span>
+        </div>
+        <div class="summary-row">
+            <span>GST (10%):</span>
+            <span>${{ "%.2f"|format(gst) }}</span>
+        </div>
+        <div class="summary-row">
+            <span>Delivery Fee:</span>
+            <span>{% if delivery_fee == 0 %}FREE{% else %}<span>${{ "%.2f"|format(delivery_fee) }}</span>{% endif %}</span>
+        </div>
+        <div class="summary-row total">
+            <span><strong>Total:</strong></span>
+            <span><strong>${{ "%.2f"|format(total) }}</strong></span>
+        </div>
+    </div>
+</div>
+{% endblock %}

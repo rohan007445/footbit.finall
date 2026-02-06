@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Latest Soccer News!!!</h2>
+
+{% for article in articles %}
+<div class="article-preview">
+    <h3>{{ article.title }}</h3>
+    <p class="meta">By {{ article.author }} | {{ article.date }}</p>
+    <p>{{ article.content[:150] }}...</p>
+    <a href="/article/{{ article.id }}" class="read-more">Read More →</a>
+</div>
+{% endfor %}
+
+<div class="welcome-box">
+    <h3>Welcome to Footbit!</h3>
+    <p>Here you can find all the latest soccer news from around the world. We also have a shop where you can buy soccer stuff!</p>
+</div>
+{% endblock %}

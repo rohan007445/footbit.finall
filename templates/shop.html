@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Soccer Shop - Get Your Gear!</h2>
+
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <div class="product-icon-big">{{ product.image }}</div>
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p class="price-big">${{ "%.2f"|format(product.price) }}</p>
+        <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="number" name="quantity" value="1" min="1" max="99" class="quantity-input">
+            <button type="submit" class="buy-button">Add to Cart</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<h3>Categories</h3>
+<ul>
+    <li>Balls</li>
+    <li>Clothing</li>
+    <li>Equipment</li>
+    <li>Accessories</li>
+</ul>
+{% endblock %}

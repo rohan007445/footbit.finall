@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>🔧 Admin Panel</h2>
+
+<div class="admin-stats">
+    <div class="stat-card">
+        <h3>📰 Articles</h3>
+        <p class="stat-number">{{ stats.articles }}</p>
+        <a href="{{ url_for('admin_articles') }}" class="stat-link">Manage Articles</a>
+    </div>
+    
+    <div class="stat-card">
+        <h3>📦 Products</h3>
+        <p class="stat-number">{{ stats.products }}</p>
+        <a href="{{ url_for('admin_products') }}" class="stat-link">Manage Products</a>
+    </div>
+    
+    <div class="stat-card">
+        <h3>👥 Users</h3>
+        <p class="stat-number">{{ stats.users }}</p>
+    </div>
+    
+    <div class="stat-card">
+        <h3>📋 Orders</h3>
+        <p class="stat-number">{{ stats.orders }}</p>
+    </div>
+    
+    <div class="stat-card">
+        <h3>💰 Revenue</h3>
+        <p class="stat-number">${{ "%.2f"|format(stats.revenue) }}</p>
+        <a href="{{ url_for('sales_report') }}" class="stat-link">View Report</a>
+    </div>
+</div>
+
+<h3>Recent Orders</h3>
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in recent_orders %}
+        <tr>
+            <td>#{{ order.id }}</td>
+            <td>{{ order.username }}</td>
+            <td>{{ order.order_date }}</td>
+            <td>${{ "%.2f"|format(order.total) }}</td>
+            <td>{{ order.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Export Options</h3>
+<div class="export-buttons">
+    <a href="{{ url_for('export_articles_text') }}" class="btn-primary">Export Articles </a>
+    <a href="{{ url_for('export_products_csv') }}" class="btn-primary">Export Products </a>
+    <a href="{{ url_for('export_orders_csv') }}" class="btn-primary">Export Orders </a>
+    <a href="{{ url_for('import_products_csv') }}" class="btn-secondary">Import Products</a>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<h3>Admin Functions</h3>
+<ul>
+    <li><a href="{{ url_for('admin_articles') }}">Manage Articles</a></li>
+    <li><a href="{{ url_for('admin_products') }}">Manage Products</a></li>
+    <li><a href="{{ url_for('sales_report') }}">Sales Report</a></li>
+    <li><a href="{{ url_for('index') }}">Back to Site</a></li>
+</ul>
+
+{% endblock %}

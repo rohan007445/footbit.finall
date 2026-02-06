@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>✏️ Edit Article (SQL UPDATE Operation)</h2>
+
+<form method="POST" class="checkout-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    
+    <div class="form-group">
+        <label>Title:</label>
+        <input type="text" name="title" class="form-control" value="{{ article.title }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label>Author:</label>
+        <input type="text" name="author" class="form-control" value="{{ article.author }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label>Date:</label>
+        <input type="date" name="date" class="form-control" value="{{ article.date }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label>Content:</label>
+        <textarea name="content" class="form-control" rows="15" required>{{ article.content }}</textarea>
+    </div>
+    
+    <button type="submit" class="place-order-btn">Update Article</button>
+</form>
+
+<a href="{{ url_for('admin_articles') }}" class="back-link">← Back to Articles</a>
+{% endblock %}

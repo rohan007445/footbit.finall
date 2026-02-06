@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>📦 My Orders</h2>
+
+{% if orders %}
+<div class="orders-container">
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-header">
+            <div class="order-id">
+                <strong>Order #{{ order.id }}</strong>
+                <span class="order-date">{{ order.order_date }}</span>
+            </div>
+            <div class="order-status-badge {% if order.status == 'Processing' %}status-processing{% elif order.status == 'Shipped' %}status-shipped{% elif order.status == 'Delivered' %}status-delivered{% endif %}">
+                {{ order.status }}
+            </div>
+        </div>
+        
+        <div class="order-body">
+            <div class="order-details-grid">
+                <div class="order-detail">
+                    <span class="detail-label">📅 Delivery Date:</span>
+                    <span class="detail-value">{{ order.delivery_date }}</span>
+                </div>
+                
+                <div class="order-detail">
+                    <span class="detail-label">📍 Delivery Location:</span>
+                    <span class="detail-value">{{ order.delivery_location }}</span>
+                </div>
+                
+                <div class="order-detail">
+                    <span class="detail-label">💳 Payment Method:</span>
+                    <span class="detail-value">{{ order.payment_method }}</span>
+                </div>
+                
+                <div class="order-detail">
+                    <span class="detail-label">🛍️ Items:</span>
+                    <span class="detail-value">{{ order.items_summary }}</span>
+                </div>
+            </div>
+            
+            <div class="order-pricing">
+                <div class="pricing-row">
+                    <span>Subtotal:</span>
+                    <span>${{ "%.2f"|format(order.subtotal) }}</span>
+                </div>
+                <div class="pricing-row">
+                    <span>GST (10%):</span>
+                    <span>${{ "%.2f"|format(order.gst) }}</span>
+                </div>
+                <div class="pricing-row">
+                    <span>Delivery Fee:</span>
+                    <span>{% if order.delivery_fee == 0 %}FREE{% else %}<span>${{ "%.2f"|format(order.delivery_fee) }}</span>{% endif %}</span>
+                </div>
+                <div class="pricing-row total">
+                    <span><strong>Total:</strong></span>
+                    <span><strong>${{ "%.2f"|format(order.total) }}</strong></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="order-footer">
+            <a href="{{ url_for('order_confirmation', order_id=order.id) }}" class="view-details-btn">View Full Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-orders">
+    <h3>No orders yet! 📭</h3>
+    <p>You haven't placed any orders. Start shopping for some great soccer gear!</p>
+    <a href="{{ url_for('shop') }}" class="shop-btn">Browse Shop</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block sidebar %}
+<h3>Order Status Guide</h3>
+<ul class="status-guide">
+    <li><span class="status-dot processing"></span> <strong>Processing:</strong> Order is being prepared</li>
+    <li><span class="status-dot shipped"></span> <strong>Shipped:</strong> Order is on the way</li>
+    <li><span class="status-dot delivered"></span> <strong>Delivered:</strong> Order has arrived</li>
+</ul>
+
+<div class="help-box">
+    <h3>Need Help?</h3>
+    <p>Contact us at support@footbit.com for any questions about your orders.</p>
+</div>
+{% endblock %}

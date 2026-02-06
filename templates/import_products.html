@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>📤 Import Products</h2>
+
+<div class="checkout-form-container">
+    <h3>File Format</h3>
+    <p>Your CSV file should have the following columns:</p>
+    <ul>
+        <li>Name - Product name</li>
+        <li>Price - Product price (decimal number)</li>
+        <li>Description - Product description</li>
+        <li>Image - Emoji or icon</li>
+    </ul>
+    
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="form-group">
+            <label>Select CSV File:</label>
+            <input type="file" name="file" accept=".csv" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="place-order-btn">Import Products</button>
+    </form>
+</div>
+
+<a href="{{ url_for('admin_panel') }}" class="back-link">← Back to Admin</a>
+{% endblock %}

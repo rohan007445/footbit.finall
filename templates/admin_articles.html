@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>📰 Manage Articles</h2>
+
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr>
+            <td>{{ article.id }}</td>
+            <td>{{ article.title[:50] }}...</td>
+            <td>{{ article.author }}</td>
+            <td>{{ article.date }}</td>
+            <td>
+                <a href="{{ url_for('edit_article', article_id=article.id) }}" class="update-btn">Edit (UPDATE)</a>
+                <form method="POST" action="{{ url_for('delete_article', article_id=article.id) }}" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="remove-btn" onclick="return confirm('Are you sure? (DELETE operation)')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('admin_panel') }}" class="back-link">← Back to Admin</a>
+{% endblock %}
